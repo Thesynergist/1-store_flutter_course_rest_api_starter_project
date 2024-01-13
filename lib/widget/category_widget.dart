@@ -29,7 +29,7 @@ class CategoryWidget extends StatelessWidget {
                 boxFit: BoxFit.fill,
               ),
             ),
-            Align(
+            Align( //can also use posistioned.fill
               alignment: Alignment.center,
               child: Text(
                 "Categ name",
