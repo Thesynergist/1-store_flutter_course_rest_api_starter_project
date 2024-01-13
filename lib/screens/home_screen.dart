@@ -36,23 +36,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _textEditingController.dispose(); //This clears the controller so it doesnt store data in the cache once the screen is cleared to help prevent errors
+    _textEditingController
+        .dispose(); //This clears the controller so it doesnt store data in the cache once the screen is cleared to help prevent errors
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() async { //TODO: what is didChangeDependencies -it is called immediatley after init state when there is a context to go from
-    getProducts();
-    super.didChangeDependencies();
-  }
+  // @override
+  // void didChangeDependencies() async { //it is called immediatley after init state when there is a context to go from, and it is called automaitcally when setState is called and perhaps any state changes like provider
+  //   getProducts();
+  //   super.didChangeDependencies();
+  // }
 
-  Future<void> getProducts () async {
-    productsList = await APIHandler.getAllProducts();
-    setState(() {
-      
-    });
-    ;
-  }
+  // Future<void> getProducts () async {
+  //   productsList = await APIHandler.getAllProducts();
+  //   setState(() {
+
+  //   });
+  //   ;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +166,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      productsList.isEmpty ? Container() : FeedsGridWidget(productsList: productsList)
+                      FutureBuilder<List<ProductsModel>>(
+                        future: APIHandler.getAllProducts(),
+                        builder: ((context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return FeedsGridWidget(productsList: productsList);
+                        }),
+                      ),
                     ]),
                   ),
                 )
