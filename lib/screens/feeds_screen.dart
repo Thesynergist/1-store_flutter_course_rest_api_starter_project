@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:store_api_flutter_course/models/prodcuts_model.dart';
+import 'package:provider/provider.dart';
+import 'package:store_api_flutter_course/models/products_model.dart';
 import 'package:store_api_flutter_course/services/api_handler.dart';
 
 import '../widget/feeds_widget.dart';
@@ -46,7 +47,9 @@ class _FeedsScreenState extends State<FeedsScreen> {
               mainAxisSpacing: 0.0,
               childAspectRatio: 0.6),
           itemBuilder: (ctx, index) {
-            return FeedsWidget(imageUrl: productsList[index].images![0], title: productsList[index].title.toString(),);
+            return ChangeNotifierProvider.value(
+              value: productsList[index],
+              child: const FeedsWidget());
           }),
     );
   }
