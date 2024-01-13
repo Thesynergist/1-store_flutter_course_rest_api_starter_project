@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController _textEditingController;
 
-  List<ProductsModel> productsList = [];
+  //List<ProductsModel> productsList = [];
 
   @override
   void initState() {
@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      FutureBuilder<List<ProductsModel>>(
+                      FutureBuilder<List<ProductsModel>>( //You need the type in for suggestions
                         future: APIHandler.getAllProducts(),
                         builder: ((context, snapshot) {
                           if (snapshot.connectionState ==
@@ -174,8 +174,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
+                          } else if (snapshot.hasError) {
+                             Center(
+                              child: Text("An error has occures ${snapshot.hasError}"),
+                            );
                           }
-                          return FeedsGridWidget(productsList: productsList);
+                          else if (snapshot.data == null) {
+                             const Center(
+                              child: Text("No products have been added yet"),
+                            );
+                          }
+                          return FeedsGridWidget(productsList: snapshot.data!);
                         }),
                       ),
                     ]),
